@@ -1,0 +1,31 @@
+.text-bold {
+  @apply font-bold;
+}
+
+.text-italic {
+  @apply italic;
+}
+
+.text-underline {
+  @apply underline;
+}
+
+.text-code {
+  @apply p-1 font-mono text-sm bg-slate-100;
+}
+
+.text-highlight {
+  @apply mx-0 my-1;
+}
+
+.text-strikethrough {
+  @apply line-through;
+}
+
+.text-subscript {
+  @apply align-sub;
+}
+
+.text-superscript {
+  @apply align-super;
+}
