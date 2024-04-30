@@ -9,7 +9,9 @@ import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { CustomTextActions } from "~/components/CustomTextActions";
 import { CustomSubmitAction } from "~/components/CustomSubmitAction";
+import CustomHeadingActions from "./CustomHeadingActions";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { HeadingNode } from "@lexical/rich-text";
 import "~/editor.css";
 
 export default function Composer() {
@@ -19,6 +21,8 @@ export default function Composer() {
     );
   }, []);
 
+  // The negative margin and needing an onClick handler to set the focus
+  // feel like hacks, but... maybe you can't call `focus` on an editable node?
   function Placeholder(isEditable: boolean) {
     const [editor] = useLexicalComposerContext();
     return (
@@ -37,6 +41,7 @@ export default function Composer() {
 
   const lexicalConfig: InitialConfigType = {
     namespace: "Lexical Test",
+    nodes: [HeadingNode],
     theme: {
       text: {
         bold: "text-bold",
@@ -64,6 +69,7 @@ export default function Composer() {
         <HistoryPlugin />
         <div className="mt-16">
           <CustomTextActions />
+          <CustomHeadingActions />
           <CustomSubmitAction />
         </div>
       </LexicalComposer>

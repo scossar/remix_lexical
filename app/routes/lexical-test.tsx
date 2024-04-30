@@ -1,5 +1,15 @@
+import { ActionFunctionArgs } from "@remix-run/node";
 import Composer from "~/components/Composer";
 import { ClientOnly } from "~/components/ClientOnly";
+
+export async function action({ request }: ActionFunctionArgs) {
+  const body = await request.formData();
+  const markdown = body?.get("markdown");
+  const html = body?.get("html");
+  console.log(`markdown: ${markdown}`);
+  console.log(`html: ${html}`);
+  return null;
+}
 
 export default function LexicalTest() {
   return (

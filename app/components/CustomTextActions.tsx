@@ -14,10 +14,6 @@ export const CustomTextActions = () => {
 
   const handleOnClick = (formatType: TextFormatType) => {
     const isActive = !activeFormats[formatType];
-    console.log(
-      `handling click for formatType: ${formatType}. isActive: ${isActive}`
-    );
-    console.log(`format obj: ${JSON.stringify(activeFormats, null, 2)}`);
     editor.dispatchCommand(FORMAT_TEXT_COMMAND, formatType);
     setActiveFormats((prev) => ({ ...prev, [formatType]: isActive }));
   };
@@ -28,9 +24,6 @@ export const CustomTextActions = () => {
       <div>
         {["Bold", "Italic", "Code", "Highlight", "Strikethrough"].map(
           (formatType, index) => {
-            console.log(
-              `in button for formatType: ${formatType}, active? ${activeFormats[formatType]}`
-            );
             return (
               <button
                 className={`px-2 py-1 mr-1 border rounded-sm border-slate-500 ${
