@@ -1,23 +1,53 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { $getSelection, $isRangeSelection } from "lexical";
+import {
+  $createParagraphNode,
+  $getSelection,
+  $isRangeSelection,
+} from "lexical";
 import { $setBlocksType } from "@lexical/selection";
 import { HeadingTagType, $createHeadingNode } from "@lexical/rich-text";
 
-type AvailableHeadingTypes = "h1" | "h2" | "h3";
-type ActiveHeading = AvailableHeadingTypes | null;
+type AvailableHeadingType = Exclude<HeadingTagType, "h4" | "h5" | "h6">;
+type ActiveHeading = AvailableHeadingType | null;
 
 export default function CustomHeadingActions() {
   const [editor] = useLexicalComposerContext();
   const [activeHeading, setActiveHeading] = useState<ActiveHeading>(null);
 
-  function handleOnClick(tag: AvailableHeadingTypes) {
+  useEffect(() => {
+    if (activeHeading !== null) {
+      const removeUpdateListener = editor.registerUpdateListener(
+        ({ editorState }) => {
+          editorState.read(() => {
+            const selection = $getSelection();
+            if ($isRangeSelection(selection)) {
+              const anchorNode = selection.anchor.getNode();
+              if (anchorNode.getType() === "paragraph") {
+                setActiveHeading(null);
+              }
+            }
+          });
+        }
+      );
+
+      return () => {
+        removeUpdateListener();
+      };
+    }
+  }, [editor, activeHeading]);
+
+  function handleOnClick(tag: AvailableHeadingType) {
     editor.update(() => {
       const selection = $getSelection();
       if ($isRangeSelection(selection)) {
-        $setBlocksType(selection, () => $createHeadingNode(tag));
-        console.log(tag);
-        setActiveHeading(tag);
+        if (activeHeading === tag) {
+          $setBlocksType(selection, () => $createParagraphNode());
+          setActiveHeading(null);
+        } else {
+          $setBlocksType(selection, () => $createHeadingNode(tag));
+          setActiveHeading(tag);
+        }
       }
     });
   }
@@ -26,9 +56,7 @@ export default function CustomHeadingActions() {
     <div className="mt-3">
       <span className="font-bold">Headings</span>
       <div>
-        {(["h1", "h2", "h3"] as Array<AvailableHeadingTypes>).map((tag) => {
-          console.log(tag);
-          console.log(activeHeading);
+        {(["h1", "h2", "h3"] as Array<AvailableHeadingType>).map((tag) => {
           return (
             <button
               className={`px-2 py-1 mr-1 border rounded-sm border-slate-500 ${
