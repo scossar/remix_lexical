@@ -4,6 +4,8 @@ import {
   $createParagraphNode,
   $getSelection,
   $isRangeSelection,
+  COMMAND_PRIORITY_LOW,
+  INSERT_PARAGRAPH_COMMAND,
 } from "lexical";
 import { $setBlocksType } from "@lexical/selection";
 import { HeadingTagType, $createHeadingNode } from "@lexical/rich-text";
@@ -16,26 +18,15 @@ export default function CustomHeadingActions() {
   const [activeHeading, setActiveHeading] = useState<ActiveHeading>(null);
 
   useEffect(() => {
-    if (activeHeading !== null) {
-      const removeUpdateListener = editor.registerUpdateListener(
-        ({ editorState }) => {
-          editorState.read(() => {
-            const selection = $getSelection();
-            if ($isRangeSelection(selection)) {
-              const anchorNode = selection.anchor.getNode();
-              if (anchorNode.getType() === "paragraph") {
-                setActiveHeading(null);
-              }
-            }
-          });
-        }
-      );
-
-      return () => {
-        removeUpdateListener();
-      };
-    }
-  }, [editor, activeHeading]);
+    return editor.registerCommand(
+      INSERT_PARAGRAPH_COMMAND,
+      () => {
+        setActiveHeading(null);
+        return false;
+      },
+      COMMAND_PRIORITY_LOW
+    );
+  }, [editor, setActiveHeading]);
 
   function handleOnClick(tag: AvailableHeadingType) {
     editor.update(() => {

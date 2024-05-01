@@ -7,10 +7,10 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
+import CustomFocusEditor from "./CustomFocusEditor";
 import { CustomTextActions } from "~/components/CustomTextActions";
 import { CustomSubmitAction } from "~/components/CustomSubmitAction";
 import CustomHeadingActions from "./CustomHeadingActions";
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { HeadingNode } from "@lexical/rich-text";
 import "~/editor.css";
 
@@ -20,24 +20,6 @@ export default function Composer() {
       <ContentEditable className="max-w-full p-2 border rounded-sm min-h-16 border-slate-400" />
     );
   }, []);
-
-  // The negative margin and needing an onClick handler to set the focus
-  // feel like hacks, but... maybe you can't call `focus` on an editable node?
-  function Placeholder(isEditable: boolean) {
-    const [editor] = useLexicalComposerContext();
-    return (
-      <button
-        onClick={() => {
-          if (isEditable) {
-            editor.focus();
-          }
-        }}
-        className="block p-2 -mt-16 text-slate-500"
-      >
-        Enter some text...
-      </button>
-    );
-  }
 
   const lexicalConfig: InitialConfigType = {
     namespace: "Lexical Test",
@@ -63,11 +45,12 @@ export default function Composer() {
       <LexicalComposer initialConfig={lexicalConfig}>
         <RichTextPlugin
           contentEditable={editableContent}
-          placeholder={Placeholder}
+          placeholder={<></>}
           ErrorBoundary={LexicalErrorBoundary}
         />
         <HistoryPlugin />
-        <div className="mt-16">
+        <div className="mt-6">
+          <CustomFocusEditor />
           <CustomTextActions />
           <CustomHeadingActions />
           <CustomSubmitAction />

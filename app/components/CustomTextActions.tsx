@@ -14,6 +14,7 @@ export const CustomTextActions = () => {
   const [codeActive, setCodeActive] = useState(false);
 
   function handleBoldClick(formatType: SupportedTextFormatType) {
+    console.log(`editor: ${JSON.stringify(editor, null, 2)}`);
     editor.dispatchCommand(FORMAT_TEXT_COMMAND, formatType);
     setBoldActive(!boldActive);
   }
