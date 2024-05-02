@@ -16,3 +16,8 @@ Move screen so cursor is:
 - at top: zt
 - center: zz
 - at bottom zb
+
+## My mappings
+
+close curly braces: (insert mode) <C-j>
+callback funciton: (insert mode) <C-c>

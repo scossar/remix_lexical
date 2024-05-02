@@ -7,6 +7,7 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
+import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import CustomFocusEditor from "./CustomFocusEditor";
 import { CustomTextActions } from "~/components/CustomTextActions";
 import { CustomSubmitAction } from "~/components/CustomSubmitAction";
@@ -48,6 +49,7 @@ export default function Composer() {
           placeholder={<></>}
           ErrorBoundary={LexicalErrorBoundary}
         />
+        <ListPlugin />
         <HistoryPlugin />
         <div className="mt-6">
           <CustomFocusEditor />
